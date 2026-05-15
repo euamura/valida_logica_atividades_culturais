@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Atividades Culturais — OSC Protótipo</title>
+<style>
+  :root {
+    --bg: #f0ede8;
+    --surface: #fafaf8;
+    --surface-alt: #f5f2ed;
+    --border: #d8d3ca;
+    --border-strong: #b8b0a4;
+    --text: #1a1714;
+    --text-secondary: #5c554e;
+    --text-tertiary: #8a8078;
+    --accent: #2c4a3e;
+    --accent-light: #e8f0ec;
+
+    --green: #2d6a4f;
+    --green-bg: #eaf4ee;
+    --green-border: #a8d5b5;
+
+    --yellow: #7a5c00;
+    --yellow-bg: #fef9e7;
+    --yellow-border: #f0d060;
+
+    --red: #8b1a1a;
+    --red-bg: #fdf0f0;
+    --red-border: #e8a0a0;
+
+    --blue: #1a3a6b;
+    --blue-bg: #eef3fc;
+    --blue-border: #9ab8e8;
+
+    --radius: 4px;
+    --radius-lg: 8px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 0 0 0.5px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06);
+
+    --mono: 'Courier New', 'Lucida Console', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 80px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--accent);
+    color: #fff;
+    padding: 28px 32px 24px;
+    border-bottom: 2px solid #1a2e25;
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .header h1 {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: -0.3px;
+    line-height: 1.3;
+    color: #e8f4ef;
+  }
+  .header h1 span {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #88b8a0;
+    margin-bottom: 4px;
+    font-family: system-ui, sans-serif;
+    font-weight: 600;
+  }
+  .badge-proto {
+    background: #88b8a0;
+    color: #1a2e25;
+    font-size: 10px;
+    font-family: system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ── CONTEXT SECTION ── */
+  .context-section {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin: 24px 0 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .context-header {
+    padding: 14px 20px;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-alt);
+  }
+  .context-header-label {
+    font-family: system-ui, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-tertiary);
+  }
+  .context-body {
+    padding: 18px 20px;
+  }
+  .context-intro {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    font-style: italic;
+    border-left: 2px solid var(--border-strong);
+    padding-left: 12px;
+  }
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 600px) {
+    .rules-grid { grid-template-columns: 1fr; }
+  }
+  .rule-card {
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    background: var(--bg);
+  }
+  .rule-label {
+    font-family: system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .rule-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-family: system-ui, sans-serif;
+  }
+
+  /* ── FORM SECTION ── */
+  .form-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .form-card-header {
+    padding: 14px 20px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--surface-alt);
+  }
+  .form-card-title {
+    font-family: system-ui, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-tertiary);
+  }
+  .form-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .field-group {
+    padding: 16px 0;
+    border-bottom: 0.5px solid var(--border);
+    animation: fadeIn 0.25s ease;
+  }
+  .field-group:last-child { border-bottom: none; }
+  .field-group.hidden { display: none; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  label {
+    display: block;
+    font-family: system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+  }
+  label .question {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-weight: normal;
+    margin-bottom: 2px;
+  }
+  label .hint {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    font-weight: normal;
+    font-style: italic;
+  }
+
+  select, input[type="number"] {
+    width: 100%;
+    padding: 9px 12px;
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8078' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  select:focus, input[type="number"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(44,74,62,0.1);
+  }
+  input[type="number"]:disabled {
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+  }
+
+  /* ── RADIO FAIXAS ── */
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+    background: #fff;
+  }
+  .radio-option:hover { background: var(--accent-light); border-color: var(--accent); }
+  .radio-option input[type="radio"] { 
+    accent-color: var(--accent); 
+    width: 15px; height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .radio-option.selected {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+  .radio-label {
+    font-family: system-ui, sans-serif;
+    font-size: 13.5px;
+    color: var(--text);
+    flex: 1;
+  }
+  .radio-midpoint {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    background: var(--surface-alt);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  /* ── INLINE ALERTS ── */
+  .alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    font-family: system-ui, sans-serif;
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin-top: 10px;
+    animation: fadeIn 0.2s ease;
+  }
+  .alert.hidden { display: none; }
+  .alert-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .alert-yellow { background: var(--yellow-bg); border: 0.5px solid var(--yellow-border); color: var(--yellow); }
+  .alert-red    { background: var(--red-bg);    border: 0.5px solid var(--red-border);    color: var(--red);    }
+  .alert-green  { background: var(--green-bg);  border: 0.5px solid var(--green-border);  color: var(--green);  }
+
+  /* ── BUTTON ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    border: none;
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: 0.2px;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-secondary { background: var(--surface-alt); color: var(--text); border: 0.5px solid var(--border-strong); }
+  .btn-secondary:hover { background: var(--border); }
+  .btn-danger { background: var(--red-bg); color: var(--red); border: 0.5px solid var(--red-border); }
+  .btn.hidden { display: none; }
+  .btn-row {
+    padding-top: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* ── RESULT PANEL ── */
+  .result-panel {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  .result-panel.hidden { display: none; }
+  .result-header {
+    padding: 12px 20px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--surface-alt);
+    font-family: system-ui, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-tertiary);
+  }
+  .result-rows {
+    padding: 4px 0;
+  }
+  .result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 13px 20px;
+    border-bottom: 0.5px solid var(--border);
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+  }
+  .result-row:last-child { border-bottom: none; }
+  .result-row-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+    flex: 1;
+    line-height: 1.4;
+  }
+  .result-row-value {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+    text-align: right;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge-green  { background: var(--green-bg);  color: var(--green);  border: 0.5px solid var(--green-border);  }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); border: 0.5px solid var(--yellow-border); }
+  .badge-red    { background: var(--red-bg);    color: var(--red);    border: 0.5px solid var(--red-border);    }
+  .badge-blue   { background: var(--blue-bg);   color: var(--blue);   border: 0.5px solid var(--blue-border);   }
+
+  .result-note {
+    padding: 12px 20px;
+    font-family: system-ui, sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border-top: 0.5px solid var(--border);
+    font-style: italic;
+    background: var(--bg);
+    line-height: 1.5;
+  }
+
+  /* ── LOG TABLE ── */
+  .log-section {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .log-header {
+    padding: 12px 20px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--surface-alt);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .log-header-label {
+    font-family: system-ui, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-tertiary);
+  }
+  .log-empty {
+    padding: 32px 20px;
+    text-align: center;
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+  .log-table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: system-ui, sans-serif;
+    font-size: 12.5px;
+  }
+  thead th {
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    border-bottom: 0.5px solid var(--border);
+    white-space: nowrap;
+    background: var(--bg);
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--surface-alt); }
+  .td-mono { font-family: var(--mono); }
+  .td-num { text-align: right; font-family: var(--mono); }
+
+  /* ── DIVIDER ── */
+  .step-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0 0;
+  }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-title {
+    font-family: system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <h1>
+        <span>Estudo de Caso · OSC</span>
+        Registro de Atividades Culturais
+      </h1>
+      <div class="badge-proto">Protótipo Funcional</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- CONTEXT -->
+  <div class="context-section">
+    <div class="context-header">
+      <div class="context-header-label">Contexto e Regras de Negócio</div>
+    </div>
+    <div class="context-body">
+      <p class="context-intro">
+        Organizações da Sociedade Civil frequentemente confundem <strong>número de ações</strong> (eventos distintos) 
+        com <strong>público alcançado</strong> (pessoas atendidas), gerando inconsistências nos relatórios. 
+        Este protótipo demonstra três camadas de validação.
+      </p>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-label">⚠ R1 — Proporção</div>
+          <div class="rule-desc">Alerta quando público estimado = número de ações. Captura o erro clássico de preencher o mesmo número nos dois campos.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-label">→ R2 — Disclosure</div>
+          <div class="rule-desc">Revelação progressiva: faixa de ações primeiro, depois número exato. Validação imediata se o exato contradiz a faixa.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-label">✗ R3 — Revisão</div>
+          <div class="rule-desc">Sinaliza para fila de revisão humana quando público/ação > 10.000 ou público = ações. Não bloqueia envio.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="form-card-title">Formulário de Registro</div>
+    </div>
+    <div class="form-body">
+
+      <!-- PASSO 1: TIPO -->
+      <div class="field-group" id="fg-tipo">
+        <div class="step-divider"><div class="step-num">1</div><div class="step-title">Tipo de atividade</div></div>
+        <div style="height:12px"></div>
+        <label for="tipo">
+          <span class="question">Qual é o tipo desta atividade cultural?</span>
+          <span class="hint">A seleção define as faixas de público disponíveis.</span>
+        </label>
+        <select id="tipo" onchange="onTipoChange()">
+          <option value="">— Selecione o tipo —</option>
+          <option value="oficina">Oficina</option>
+          <option value="espetaculo">Espetáculo</option>
+          <option value="exposicao">Exposição</option>
+        </select>
+      </div>
+
+      <!-- PASSO 2: FAIXA DE AÇÕES -->
+      <div class="field-group hidden" id="fg-faixa-acoes">
+        <div class="step-divider"><div class="step-num">2</div><div class="step-title">Número de ações — faixa</div></div>
+        <div style="height:12px"></div>
+        <label>
+          <span class="question">Em qual faixa se enquadra o número de vezes que esta atividade foi realizada?</span>
+          <span class="hint">Cada ação = um evento com data, local e programação distintos.</span>
+        </label>
+        <div class="radio-group" id="radio-faixa-acoes">
+          <label class="radio-option" onclick="selectFaixaAcoes(this)">
+            <input type="radio" name="faixaAcoes" value="1|1|1"> 
+            <span class="radio-label">1 ação</span>
+          </label>
+          <label class="radio-option" onclick="selectFaixaAcoes(this)">
+            <input type="radio" name="faixaAcoes" value="2|5|2">
+            <span class="radio-label">2 a 5 ações</span>
+          </label>
+          <label class="radio-option" onclick="selectFaixaAcoes(this)">
+            <input type="radio" name="faixaAcoes" value="6|20|6">
+            <span class="radio-label">6 a 20 ações</span>
+          </label>
+          <label class="radio-option" onclick="selectFaixaAcoes(this)">
+            <input type="radio" name="faixaAcoes" value="21|9999|21">
+            <span class="radio-label">Mais de 20 ações</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- PASSO 3: NÚMERO EXATO -->
+      <div class="field-group hidden" id="fg-num-exato">
+        <div class="step-divider"><div class="step-num">3</div><div class="step-title">Número de ações — confirmação</div></div>
+        <div style="height:12px"></div>
+        <label for="numExato">
+          <span class="question">Quantas vezes essa atividade foi realizada?</span>
+          <span class="hint" id="hint-faixa">Informe o número exato dentro da faixa selecionada.</span>
+        </label>
+        <input type="number" id="numExato" min="1" placeholder="Ex: 12" oninput="onNumExatoChange()" />
+        <div class="alert alert-red hidden" id="alert-fora-faixa">
+          <div class="alert-icon">✗</div>
+          <div><strong>Número fora da faixa selecionada.</strong> Revise a faixa ou o número informado.</div>
+        </div>
+      </div>
+
+      <!-- PASSO 4: FAIXA DE PÚBLICO -->
+      <div class="field-group hidden" id="fg-publico">
+        <div class="step-divider"><div class="step-num">4</div><div class="step-title">Público alcançado</div></div>
+        <div style="height:12px"></div>
+        <label>
+          <span class="question">Em qual faixa se enquadra o total de pessoas atendidas por esta atividade?</span>
+          <span class="hint">Considere o total acumulado em todas as ações realizadas.</span>
+        </label>
+        <div class="radio-group" id="radio-publico"></div>
+        <div class="alert alert-yellow hidden" id="alert-r1">
+          <div class="alert-icon">⚠</div>
+          <div><strong>Atenção (R1):</strong> O número estimado de pessoas atendidas está igual ao número de ações. Cada ação atendeu exatamente 1 pessoa? Confirme ou revise.</div>
+        </div>
+      </div>
+
+      <!-- BOTÃO VERIFICAR -->
+      <div class="btn-row">
+        <button class="btn btn-primary hidden" id="btn-verificar" onclick="verificar()">
+          ✓ Verificar consistência do registro
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="result-panel hidden" id="result-panel">
+    <div class="result-header">Resultado da Verificação</div>
+    <div class="result-rows">
+      <div class="result-row">
+        <div>
+          <div style="font-weight:600; font-size:13px; color:var(--text); margin-bottom:2px;" id="r-acoes-label">Faixa e número de ações</div>
+          <div class="result-row-label" id="r-acoes-detail"></div>
+        </div>
+        <div style="text-align:right">
+          <div class="result-row-value" id="r-acoes-val"></div>
+          <div style="margin-top:4px"><span class="status-badge" id="badge-acoes"></span></div>
+        </div>
+      </div>
+      <div class="result-row">
+        <div>
+          <div style="font-weight:600; font-size:13px; color:var(--text); margin-bottom:2px;">Proporção público / ação</div>
+          <div class="result-row-label" id="r-prop-detail"></div>
+        </div>
+        <div style="text-align:right">
+          <div class="result-row-value" id="r-prop-val"></div>
+          <div style="margin-top:4px"><span class="status-badge" id="badge-prop"></span></div>
+        </div>
+      </div>
+      <div class="result-row">
+        <div>
+          <div style="font-weight:600; font-size:13px; color:var(--text); margin-bottom:2px;">Status de consolidação</div>
+          <div class="result-row-label" id="r-status-detail"></div>
+        </div>
+        <div style="text-align:right">
+          <div style="margin-top:4px"><span class="status-badge" id="badge-status"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="result-note" id="result-note"></div>
+    <div style="padding: 12px 20px; border-top: 0.5px solid var(--border);">
+      <button class="btn btn-secondary" id="btn-add-log" onclick="addLog()">→ Adicionar ao log</button>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div class="log-section">
+    <div class="log-header">
+      <div class="log-header-label">Log de Registros</div>
+      <button class="btn btn-danger" onclick="clearLog()" style="padding:5px 12px; font-size:11px;">✗ Limpar log</button>
+    </div>
+    <div id="log-empty" class="log-empty">Nenhum registro adicionado ainda.</div>
+    <div class="log-table-wrap" id="log-table-wrap" style="display:none">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Ações</th>
+            <th>Público estimado</th>
+            <th>Proporção</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="log-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ── DADOS ──────────────────────────────────────────────────────────────────
+
+const PUBLICO_FAIXAS = {
+  oficina: [
+    { label: 'Até 15 pessoas',    mid: 8  },
+    { label: '16 a 30 pessoas',   mid: 23 },
+    { label: '31 a 60 pessoas',   mid: 45 },
+    { label: 'Mais de 60 pessoas',mid: 90 },
+  ],
+  espetaculo: [
+    { label: 'Até 100 pessoas',      mid: 50   },
+    { label: '101 a 500 pessoas',    mid: 300  },
+    { label: '501 a 2.000 pessoas',  mid: 1250 },
+    { label: 'Mais de 2.000 pessoas',mid: 5000 },
+  ],
+  exposicao: [
+    { label: 'Até 500 pessoas',        mid: 250   },
+    { label: '501 a 2.000 pessoas',    mid: 1250  },
+    { label: '2.001 a 10.000 pessoas', mid: 6000  },
+    { label: 'Mais de 10.000 pessoas', mid: 20000 },
+  ],
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+
+let state = {
+  tipo: '',
+  faixaMin: null,
+  faixaMax: null,
+  numExato: null,
+  publicoMid: null,
+  publicoLabel: '',
+  logCount: 0,
+  lastResult: null,
+};
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+
+function show(id)  { document.getElementById(id).classList.remove('hidden'); }
+function hide(id)  { document.getElementById(id).classList.add('hidden'); }
+function $id(id)   { return document.getElementById(id); }
+
+function fmt(n) {
+  return n.toLocaleString('pt-BR');
+}
+
+function setBadge(id, cls, icon, text) {
+  const el = $id(id);
+  el.className = 'status-badge badge-' + cls;
+  el.textContent = icon + ' ' + text;
+}
+
+// ── PASSO 1: TIPO ──────────────────────────────────────────────────────────
+
+function onTipoChange() {
+  const tipo = $id('tipo').value;
+  state.tipo = tipo;
+  state.faixaMin = null;
+  state.faixaMax = null;
+  state.numExato = null;
+  state.publicoMid = null;
+
+  // reset campos abaixo
+  hide('fg-faixa-acoes');
+  hide('fg-num-exato');
+  hide('fg-publico');
+  hide('btn-verificar');
+  hide('result-panel');
+  hide('alert-r1');
+
+  // desmarcar radios
+  document.querySelectorAll('input[name="faixaAcoes"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.radio-option').forEach(r => r.classList.remove('selected'));
+
+  if (!tipo) return;
+
+  // build público faixas
+  buildPublicoFaixas(tipo);
+
+  show('fg-faixa-acoes');
+}
+
+function buildPublicoFaixas(tipo) {
+  const faixas = PUBLICO_FAIXAS[tipo];
+  const container = $id('radio-publico');
+  container.innerHTML = '';
+  faixas.forEach((f, i) => {
+    const lbl = document.createElement('label');
+    lbl.className = 'radio-option';
+    lbl.onclick = function() { selectPublico(this, f.mid, f.label); };
+    lbl.innerHTML = `
+      <input type="radio" name="publicoFaixa" value="${i}">
+      <span class="radio-label">${f.label}</span>
+      <span class="radio-midpoint">≈ ${fmt(f.mid)} p.</span>
+    `;
+    container.appendChild(lbl);
+  });
+}
+
+// ── PASSO 2: FAIXA DE AÇÕES ────────────────────────────────────────────────
+
+function selectFaixaAcoes(el) {
+  setTimeout(() => { // after radio checked
+    document.querySelectorAll('#radio-faixa-acoes .radio-option').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+
+    const radio = el.querySelector('input[type="radio"]');
+    const [min, max, def] = radio.value.split('|').map(Number);
+    state.faixaMin = min;
+    state.faixaMax = max;
+    state.numExato = null;
+
+    hide('alert-fora-faixa');
+    hide('fg-num-exato');
+    hide('fg-publico');
+    hide('btn-verificar');
+    hide('result-panel');
+
+    const numExato = $id('numExato');
+
+    if (min === 1 && max === 1) {
+      // Auto-fill
+      state.numExato = 1;
+      numExato.value = 1;
+      numExato.disabled = true;
+      $id('hint-faixa').textContent = 'Preenchido automaticamente: 1 ação.';
+    } else {
+      numExato.value = '';
+      numExato.disabled = false;
+      numExato.min = min;
+      numExato.max = max < 9999 ? max : '';
+      $id('hint-faixa').textContent = max < 9999
+        ? `Informe o número exato entre ${min} e ${max}.`
+        : `Informe o número exato (mínimo ${min}).`;
+    }
+
+    show('fg-num-exato');
+
+    if (min === 1 && max === 1) {
+      // pode já ir pro público
+      checkMostrarPublico();
+    }
+  }, 0);
+}
+
+// ── PASSO 3: NÚMERO EXATO ──────────────────────────────────────────────────
+
+function onNumExatoChange() {
+  const val = parseInt($id('numExato').value);
+  hide('alert-fora-faixa');
+
+  if (!val || val < 1) {
+    state.numExato = null;
+    hide('fg-publico');
+    hide('btn-verificar');
+    return;
+  }
+
+  const { faixaMin, faixaMax } = state;
+  if (val < faixaMin || val > faixaMax) {
+    show('alert-fora-faixa');
+    state.numExato = null;
+    hide('fg-publico');
+    hide('btn-verificar');
+    return;
+  }
+
+  state.numExato = val;
+  checkMostrarPublico();
+}
+
+function checkMostrarPublico() {
+  if (state.numExato && state.tipo) {
+    show('fg-publico');
+    checkBotaoVerificar();
+    checkR1();
+  }
+}
+
+// ── PASSO 4: PÚBLICO ───────────────────────────────────────────────────────
+
+function selectPublico(el, mid, label) {
+  setTimeout(() => {
+    document.querySelectorAll('#radio-publico .radio-option').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+    state.publicoMid = mid;
+    state.publicoLabel = label;
+    checkBotaoVerificar();
+    checkR1();
+    hide('result-panel');
+  }, 0);
+}
+
+function checkR1() {
+  if (!state.numExato || !state.publicoMid) {
+    hide('alert-r1');
+    return;
+  }
+  if (state.publicoMid === state.numExato) {
+    show('alert-r1');
+  } else {
+    hide('alert-r1');
+  }
+}
+
+function checkBotaoVerificar() {
+  if (state.numExato && state.publicoMid) {
+    show('btn-verificar');
+  } else {
+    hide('btn-verificar');
+  }
+}
+
+// ── VERIFICAR ─────────────────────────────────────────────────────────────
+
+function verificar() {
+  const { tipo, numExato, publicoMid, publicoLabel, faixaMin, faixaMax } = state;
+
+  // --- Linha 1: Faixa/Ações ---
+  const faixaOk = numExato >= faixaMin && numExato <= faixaMax;
+  $id('r-acoes-label').textContent = 'Faixa e número de ações';
+  $id('r-acoes-val').textContent = numExato + ' ação(ões)';
+  $id('r-acoes-detail').textContent = 
+    faixaMax < 9999 
+      ? `Faixa: ${faixaMin}–${faixaMax} · Informado: ${numExato}`
+      : `Faixa: >${faixaMin - 1} · Informado: ${numExato}`;
+
+  if (faixaOk) {
+    setBadge('badge-acoes', 'green', '✓', 'Consistente');
+  } else {
+    setBadge('badge-acoes', 'red', '✗', 'Erro de faixa');
+  }
+
+  // --- Linha 2: Proporção ---
+  const proporcao = publicoMid / numExato;
+  $id('r-prop-val').textContent = fmt(Math.round(proporcao)) + ' p/ação';
+  $id('r-prop-detail').textContent = 
+    `Público estimado (ponto médio): ${fmt(publicoMid)} · Ações: ${numExato}`;
+
+  let propBadgeClass, propBadgeText, propBadgeIcon;
+  if (publicoMid === numExato) {
+    propBadgeClass = 'yellow'; propBadgeIcon = '⚠'; propBadgeText = 'Verificar (R1)';
+  } else if (proporcao > 10000) {
+    propBadgeClass = 'blue'; propBadgeIcon = '→'; propBadgeText = 'Revisão (R3-A)';
+  } else {
+    propBadgeClass = 'green'; propBadgeIcon = '✓'; propBadgeText = 'Normal';
+  }
+  setBadge('badge-prop', propBadgeClass, propBadgeIcon, propBadgeText);
+
+  // --- Linha 3: Status final ---
+  const gatilhoA = proporcao > 10000;
+  const gatilhoB = publicoMid === numExato;
+
+  let statusClass, statusIcon, statusText, statusDetail, nota;
+
+  if (gatilhoA && gatilhoB) {
+    statusClass = 'blue'; statusIcon = '→'; statusText = 'Revisão humana';
+    statusDetail = 'Gatilhos R3-A e R3-B acionados simultaneamente.';
+    nota = '→ Este registro será encaminhado para fila de revisão humana (proporção > 10.000 p/ação E público = ações). Nota: registros > 3× a média histórica da OS também acionariam revisão — dado indisponível no protótipo.';
+  } else if (gatilhoA) {
+    statusClass = 'blue'; statusIcon = '→'; statusText = 'Revisão humana';
+    statusDetail = 'Gatilho R3-A: proporção público/ação superior a 10.000.';
+    nota = '→ Este registro será encaminhado para fila de revisão humana (R3-A: público por ação = ' + fmt(Math.round(proporcao)) + ' > 10.000). Nota: registros > 3× a média histórica da OS também acionariam revisão — dado indisponível no protótipo.';
+  } else if (gatilhoB) {
+    statusClass = 'blue'; statusIcon = '→'; statusText = 'Revisão humana';
+    statusDetail = 'Gatilho R3-B: público estimado igual ao número de ações.';
+    nota = '→ Este registro será encaminhado para fila de revisão humana (R3-B: possível confusão público × ações). Nota: registros > 3× a média histórica da OS também acionariam revisão — dado indisponível no protótipo.';
+  } else {
+    statusClass = 'green'; statusIcon = '✓'; statusText = 'Consolidação automática';
+    statusDetail = 'Nenhum gatilho crítico identificado.';
+    nota = '✓ Registro aprovado para consolidação automática. Nota: registros > 3× a média histórica da OS acionariam revisão humana — dado indisponível no protótipo.';
+  }
+
+  setBadge('badge-status', statusClass, statusIcon, statusText);
+  $id('r-status-detail').textContent = statusDetail;
+  $id('result-note').textContent = nota;
+
+  // store for log
+  state.lastResult = {
+    tipo: tipo.charAt(0).toUpperCase() + tipo.slice(1),
+    acoes: numExato,
+    publicoMid,
+    publicoLabel,
+    proporcao: Math.round(proporcao),
+    statusClass,
+    statusIcon,
+    statusText,
+  };
+
+  show('result-panel');
+  $id('result-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── LOG ───────────────────────────────────────────────────────────────────
+
+function addLog() {
+  const r = state.lastResult;
+  if (!r) return;
+
+  state.logCount++;
+  const tbody = $id('log-tbody');
+  const tr = document.createElement('tr');
+
+  const badgeHtml = `<span class="status-badge badge-${r.statusClass}" style="font-size:10px">${r.statusIcon} ${r.statusText}</span>`;
+
+  tr.innerHTML = `
+    <td class="td-mono">${state.logCount}</td>
+    <td>${r.tipo}</td>
+    <td class="td-num">${r.acoes}</td>
+    <td>${r.publicoLabel}<br><span style="font-family:var(--mono);font-size:11px;color:var(--text-tertiary)">≈ ${fmt(r.publicoMid)} p.</span></td>
+    <td class="td-num">${fmt(r.proporcao)} p/ação</td>
+    <td>${badgeHtml}</td>
+  `;
+  tbody.appendChild(tr);
+
+  $id('log-empty').style.display = 'none';
+  $id('log-table-wrap').style.display = 'block';
+
+  // reset form
+  resetForm();
+}
+
+function clearLog() {
+  $id('log-tbody').innerHTML = '';
+  state.logCount = 0;
+  $id('log-empty').style.display = '';
+  $id('log-table-wrap').style.display = 'none';
+}
+
+function resetForm() {
+  $id('tipo').value = '';
+  state = { ...state, tipo:'', faixaMin:null, faixaMax:null, numExato:null, publicoMid:null, publicoLabel:'', lastResult:null };
+  hide('fg-faixa-acoes');
+  hide('fg-num-exato');
+  hide('fg-publico');
+  hide('btn-verificar');
+  hide('result-panel');
+  hide('alert-r1');
+  hide('alert-fora-faixa');
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.radio-option').forEach(r => r.classList.remove('selected'));
+}
+</script>
+</body>
+</html>
