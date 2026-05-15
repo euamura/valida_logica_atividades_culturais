@@ -1,0 +1,1 @@
+# valida_logica_atividades_culturais
